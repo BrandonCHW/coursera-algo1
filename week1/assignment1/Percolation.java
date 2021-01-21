@@ -8,7 +8,7 @@ import edu.princeton.cs.algs4.WeightedQuickUnionUF;
 
 public class Percolation {
     private int _n = 0;
-    private int[][] open;
+    private boolean[][] open;
     private WeightedQuickUnionUF site;
 
     private void OutOfBoundsGuard(int row, int col) {
@@ -20,7 +20,7 @@ public class Percolation {
     // creates n-by-n grid, with all sites initially blocked; 1 = open, 0 = blocked
     public Percolation(int n) {
         _n = n;
-        open = new int[n][n];
+        open = new boolean[n][n];
         site = new WeightedQuickUnionUF(n * n);
     }
 
@@ -32,7 +32,7 @@ public class Percolation {
         int id = r * _n + c;
         if (isOpen(row, col)) return;
 
-        open[r][c] = 1;
+        open[r][c] = true;
         if (id % _n - 1 >= 0 && isOpen(row, col - 1)) site.union(id, id - 1); // left
         if (id % _n + 1 < _n && isOpen(row, col + 1)) site.union(id, id + 1); // right
         if (id - _n >= 0 && isOpen(row - 1, col)) site.union(id, id - _n); // up
@@ -42,7 +42,7 @@ public class Percolation {
     // is the site (row, col) open
     public boolean isOpen(int row, int col) {
         OutOfBoundsGuard(row, col);
-        return open[row - 1][col - 1] == 1;
+        return open[row - 1][col - 1];
     }
 
     // is the site (row, col) full?
@@ -51,7 +51,7 @@ public class Percolation {
         int r = row - 1;
         int c = col - 1;
         int bottomId = r * _n + c;
-        if (open[r][c] == 1) {
+        if (open[r][c]) {
             try {
                 for (int i = 0; i < _n; i++) {
                     if (site.find(i) == site.find(bottomId)) {
@@ -73,7 +73,7 @@ public class Percolation {
         int n = open.length;
         for (int i = 0; i < n; i++) {
             for (int j = 0; j < n; j++) {
-                if (open[i][j] == 1) count++;
+                if (open[i][j]) count++;
             }
         }
         return count;

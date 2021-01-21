@@ -1,7 +1,7 @@
 /* *****************************************************************************
- *  Name:              Alan Turing
- *  Coursera User ID:  123456
- *  Last modified:     1/1/2019
+ *  Name:              Brandon Chan
+ *  Coursera User ID:  10101010100
+ *  Last modified:     1/1/2077
  **************************************************************************** */
 
 import edu.princeton.cs.algs4.StdRandom;
@@ -22,15 +22,15 @@ public class PercolationStats {
 
     private void generateTrials() {
         for (int i = 0; i < n_trials; i++) {
-            Percolation sample = new Percolation(_n);
-            while (!sample.percolates()) {
-                int row = StdRandom.uniform(_n) + 1;
-                int col = StdRandom.uniform(_n) + 1;
-                if (!sample.isOpen(row, col)) {
-                    sample.open(row, col);
+            Percolation perc = new Percolation(_n);
+            while (!perc.percolates()) {
+                int row = StdRandom.uniform(1, _n + 1);
+                int col = StdRandom.uniform(1, _n + 1);
+                if (!perc.isOpen(row, col)) {
+                    perc.open(row, col);
                 }
             }
-            xt[i] = (double) sample.numberOfOpenSites() / (_n * _n);
+            xt[i] = (double) perc.numberOfOpenSites() / (_n * _n);
         }
     }
 
@@ -46,16 +46,12 @@ public class PercolationStats {
 
     // low endpoint of 95% confidence interval
     public double confidenceLo() {
-        double mean = mean();
-        double variance = Math.sqrt(stddev());
-        return mean - (1.96 * variance / Math.sqrt(n_trials));
+        return mean() - ((1.96 * stddev()) / Math.sqrt(n_trials));
     }
 
     // high endpoint of 95% confidence interval
     public double confidenceHi() {
-        double mean = mean();
-        double variance = Math.sqrt(stddev());
-        return mean + (1.96 * variance / Math.sqrt(n_trials));
+        return mean() + ((1.96 * stddev()) / Math.sqrt(n_trials));
     }
 
     // test client (see below)
