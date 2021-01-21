@@ -1,0 +1,8 @@
+*.iml
+.idea
+.lift
+*.png
+*.txt
+CREDITS
+InteractivePercolationVisualizer.java
+PercolationVisualizer.java
