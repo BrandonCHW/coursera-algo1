@@ -7,14 +7,14 @@ import edu.princeton.cs.algs4.StdRandom;
 import edu.princeton.cs.algs4.StdStats;
 
 public class PercolationStats {
-    private int gridSize;
-    private int nTrials;
-    private double[] xt;
+    private final int nTrials;
+    private final double[] xt;
+    private double CONFIDENCE_95_PLEASE_STOP_CRYING = 1.96;
 
     // perform independent trials on an n-by-n grid
     public PercolationStats(int n, int trials) {
         if (n <= 1 || trials <= 1) throw new IllegalArgumentException();
-        gridSize = n;
+        int gridSize = n;
         nTrials = trials;
         xt = new double[trials];
 
@@ -43,12 +43,12 @@ public class PercolationStats {
 
     // low endpoint of 95% confidence interval
     public double confidenceLo() {
-        return mean() - ((1.96 * stddev()) / Math.sqrt(nTrials));
+        return mean() - ((CONFIDENCE_95_PLEASE_STOP_CRYING * stddev()) / Math.sqrt(nTrials));
     }
 
     // high endpoint of 95% confidence interval
     public double confidenceHi() {
-        return mean() + ((1.96 * stddev()) / Math.sqrt(nTrials));
+        return mean() + ((CONFIDENCE_95_PLEASE_STOP_CRYING * stddev()) / Math.sqrt(nTrials));
     }
 
     // test client (see below)
@@ -62,7 +62,7 @@ public class PercolationStats {
         PercolationStats stats = new PercolationStats(n, trials);
         System.out.printf("mean:%f%n", stats.mean());
         System.out.printf("stddev:%f%n", stats.stddev());
-        System.out.printf("95 confidence interval: [%f, %f]%n", stats.confidenceLo(),
+        System.out.printf("95%% confidence interval = [%f, %f]%n", stats.confidenceLo(),
                           stats.confidenceHi());
     }
 }

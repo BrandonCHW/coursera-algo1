@@ -6,22 +6,16 @@
 import edu.princeton.cs.algs4.WeightedQuickUnionUF;
 
 public class Percolation {
-    private int gridSize = 0;
+    private final int gridSize;
     private boolean[][] open;
-    private int topIndex = 0; //virtual top index
-    private int botIndex = 0; //virtual bot index
+    private final int topIndex; // virtual top index
+    private final int botIndex; // virtual bot index
     private int opened = 0;
     // includes virtual top & bottom
-    private WeightedQuickUnionUF perc;
+    private final WeightedQuickUnionUF perc;
 
     // WQUUF used only for checking cell fullness (prevents backwash)
-    private WeightedQuickUnionUF fullness;
-
-    private void OutOfBoundsGuard(int row, int col) {
-        if ((row < 1 || row > gridSize) || (col < 1 || col > gridSize)) {
-            throw new IllegalArgumentException();
-        }
-    }
+    private final WeightedQuickUnionUF fullness;
 
     // creates n-by-n grid, with all sites initially blocked; 1 = open, 0 = blocked
     public Percolation(int n) {
@@ -50,7 +44,7 @@ public class Percolation {
             perc.union(id, topIndex);
             fullness.union(id, topIndex);
         }
-        else if (row == gridSize) {
+        if (row == gridSize) {
             perc.union(id, botIndex);
         }
         if (id % gridSize - 1 >= 0 && isOpen(row, col - 1)) {
@@ -73,13 +67,13 @@ public class Percolation {
 
     // is the site (row, col) open
     public boolean isOpen(int row, int col) {
-        OutOfBoundsGuard(row, col);
+        outOfBoundsGuard(row, col);
         return open[row - 1][col - 1];
     }
 
     // is the site (row, col) full?
     public boolean isFull(int row, int col) {
-        OutOfBoundsGuard(row, col);
+        outOfBoundsGuard(row, col);
         int r = row - 1;
         int c = col - 1;
         int id = r * gridSize + c;
@@ -116,5 +110,11 @@ public class Percolation {
 
         System.out.println();
         System.out.println(perc.percolates() ? "Percolates" : "Doesn't Percolate");
+    }
+
+    private void outOfBoundsGuard(int row, int col) {
+        if ((row < 1 || row > gridSize) || (col < 1 || col > gridSize)) {
+            throw new IllegalArgumentException();
+        }
     }
 }
