@@ -1,7 +1,6 @@
 /* *****************************************************************************
  *  Name:              Brandon Chan
- *  Coursera User ID:  10101010100
- *  Last modified:     1/1/2077
+ *  Last modified:     21/01/2021
  **************************************************************************** */
 
 import edu.princeton.cs.algs4.StdRandom;
@@ -18,9 +17,7 @@ public class PercolationStats {
         gridSize = n;
         nTrials = trials;
         xt = new double[trials];
-    }
 
-    private void generateTrials() {
         for (int i = 0; i < nTrials; i++) {
             Percolation perc = new Percolation(gridSize);
             while (!perc.percolates()) {
@@ -63,7 +60,6 @@ public class PercolationStats {
         int n = Integer.parseInt(args[0]);
         int trials = Integer.parseInt(args[1]);
         PercolationStats stats = new PercolationStats(n, trials);
-        stats.generateTrials();
         System.out.printf("mean:%f%n", stats.mean());
         System.out.printf("stddev:%f%n", stats.stddev());
         System.out.printf("95 confidence interval: [%f, %f]%n", stats.confidenceLo(),
