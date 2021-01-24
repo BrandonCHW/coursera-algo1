@@ -129,8 +129,7 @@ public class Deque<Item> implements Iterable<Item> {
     public static void main(String[] args) {
         Deque<String> deq = new Deque<>();
         // Test 1: isEmpty returns 0 when empty
-        boolean isEmpty = deq.isEmpty();
-        System.out.println( "Deque.isEmpty(): " + (isEmpty ? "OK" : "FAIL"));
+        System.out.println( "Deque.isEmpty(): " + (deq.isEmpty() ? "OK" : "FAIL"));
 
         // Test 2: Adding items at the front works   result: front-> B A <- end
         deq.addFirst("A");
@@ -148,6 +147,14 @@ public class Deque<Item> implements Iterable<Item> {
         // Test 6: Iterator hasNext
         Iterator<String> it = deq.iterator();
         System.out.println( "Deque.iterator().hasNext(): " + (it.hasNext() ?  "OK" : "FAIL"));
+
+        // Test 6.5: Iterator remove throws
+        try {
+            it.remove();
+            System.out.println("Deque.iterator().remove() doesn't throw (FAIL!)");
+        } catch(UnsupportedOperationException e) {
+            System.out.println("Deque.iterator().remove() OK");
+        }
 
         // Test 7: iterator next
         String next = it.next();
