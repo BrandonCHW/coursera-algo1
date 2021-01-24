@@ -1,6 +1,6 @@
 import java.util.Iterator;
 import java.util.NoSuchElementException;
-
+import edu.princeton.cs.algs4.StdOut;
 import edu.princeton.cs.algs4.StdRandom;
 
 public class RandomizedQueue<Item> implements Iterable<Item> {
@@ -153,13 +153,13 @@ public class RandomizedQueue<Item> implements Iterable<Item> {
         String random = rq.sample();
         System.out.println( "RandomizedQueue.sample(): " + (rq.size == 4 ? "OK" : "FAIL"));
 
-        for (int i = 0; i < 100; i++) {
+        for (int i = 0; i < 8; i++) {
             System.out.println(rq.sample());
         }
 
         // Test 9: Removing items from the front works  result: front-> A C D <- end
         String removedFront = rq.dequeue();
-        System.out.println( "RandomizedQueue.dequeue(): " + (rq.size == 3 ? "OK" : "FAIL"));
+        StdOut.println( "RandomizedQueue.dequeue(): " + (rq.size == 3 ? "OK" : "FAIL"));
 
     }
 
