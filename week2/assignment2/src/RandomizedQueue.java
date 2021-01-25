@@ -11,6 +11,13 @@ public class RandomizedQueue<Item> implements Iterable<Item> {
     private class Node {
         Item item;
         Node next;
+
+        public Node copy() {
+            Node copy = new Node();
+            copy.item = this.item;
+            copy.next = next;
+            return copy;
+        }
     }
     // construct an empty randomized queue
     public RandomizedQueue() {
@@ -94,23 +101,48 @@ public class RandomizedQueue<Item> implements Iterable<Item> {
             throw new NoSuchElementException("Can't dequeue: Queue is empty");
         }
     }
+
+    private RandomizedQueue<Item> copy() {
+        RandomizedQueue<Item> queueCopy = new RandomizedQueue<>();
+        if (!isEmpty()) {
+            Node frontCopy = front.copy();
+            Node current = frontCopy;
+            while (current.next != null) {
+                current.next = current.next.copy();
+                current = current.next;
+            }
+            Node toEnqueue = frontCopy;
+            while (toEnqueue != null) {
+                queueCopy.enqueue(toEnqueue.item);
+                toEnqueue = toEnqueue.next;
+            }
+        }
+        return queueCopy;
+    }
+
+    // Note: How to improve: use array as data structure instead of linked list (timing grade)
     // return an independent iterator over items in random order
     public Iterator<Item> iterator() {
+        RandomizedQueue<Item> copy = this.copy();
+        RandomizedQueue<Item> shuffled = new RandomizedQueue<>();
+        while (!copy.isEmpty()) {
+            shuffled.enqueue(copy.dequeue());
+        }
+
         return new Iterator<>() {
-            private Node currentNode = front;
+            private Node currentNode = shuffled.front;
 
             @Override
             public boolean hasNext() {
-                return currentNode.next != null;
+                return currentNode != null;
             }
 
             @Override
             public Item next() {
-                if (currentNode.next == null) {
-                    throw new NoSuchElementException("There is no next item to return");
-                }
+                if (!hasNext()) throw new NoSuchElementException("There is no next item to return");
+                Item curr = currentNode.item;
                 currentNode = currentNode.next;
-                return currentNode.item;
+                return curr;
             }
 
             @Override
@@ -147,7 +179,6 @@ public class RandomizedQueue<Item> implements Iterable<Item> {
 
         // Test 7: iterator next
         String next = it.next();
-        System.out.println( "RandomizedQueue.iterator().next(): " + (next == "C" ?  "OK" : "FAIL"));
 
         // Test 8: Sample
         String random = rq.sample();

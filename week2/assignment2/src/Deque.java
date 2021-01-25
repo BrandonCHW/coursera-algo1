@@ -79,9 +79,14 @@ public class Deque<Item> implements Iterable<Item> {
             throw new NoSuchElementException("Can't remove first, queue is empty.");
         }
         Item oldItem = front.item;
-        Node newFront = front.next;
-        newFront.prev = null;
-        front = newFront;
+        if (size == 1) {
+            front = null;
+            end = null;
+        } else {
+            Node newFront = front.next;
+            newFront.prev = null;
+            front = newFront;
+        }
         size--;
         return oldItem;
     }
@@ -92,9 +97,14 @@ public class Deque<Item> implements Iterable<Item> {
             throw new NoSuchElementException("Can't remove last, queue is empty.");
         }
         Item oldItem = end.item;
-        Node newEnd = end.prev;
-        newEnd.next = null;
-        end = newEnd;
+        if (size == 1) {
+            front=null;
+            end = null;
+        } else {
+            Node newEnd = end.prev;
+            newEnd.next = null;
+            end = newEnd;
+        }
         size--;
         return oldItem;
     }
@@ -102,20 +112,20 @@ public class Deque<Item> implements Iterable<Item> {
     // return an iterator over items in order from front to back
     public Iterator<Item> iterator() {
         return new Iterator<>() {
+
             private Node currentNode = front;
 
             @Override
             public boolean hasNext() {
-                return currentNode.next != null;
+                return currentNode != null;
             }
 
             @Override
             public Item next() {
-                if (currentNode.next == null) {
-                    throw new NoSuchElementException("There is no next item to return");
-                }
+                if (!hasNext()) throw new NoSuchElementException("There is no next item to return");
+                Item curr = currentNode.item;
                 currentNode = currentNode.next;
-                return currentNode.item;
+                return curr;
             }
 
             @Override
@@ -125,8 +135,23 @@ public class Deque<Item> implements Iterable<Item> {
         };
     }
 
+    private static void test() {
+        Deque<Integer> deq = new Deque<>();
+        deq.addFirst(1);
+        deq.addFirst(2);
+        deq.addFirst(3);
+        deq.addFirst(4);
+        deq.addFirst(5);
+        Iterator it = deq.iterator();
+        for (Integer i : deq) {
+            System.out.print(i);
+        }
+        System.out.println();
+    }
+
     // unit testing (required)
     public static void main(String[] args) {
+        test();
         Deque<String> deq = new Deque<>();
         // Test 1: isEmpty returns 0 when empty
         System.out.println( "Deque.isEmpty(): " + (deq.isEmpty() ? "OK" : "FAIL"));
@@ -158,7 +183,7 @@ public class Deque<Item> implements Iterable<Item> {
 
         // Test 7: iterator next
         String next = it.next();
-        System.out.println( "Deque.iterator().next(): " + (next == "A" ?  "OK" : "FAIL"));
+        System.out.println( "Deque.iterator().next(): " + (next == "B" ?  "OK" : "FAIL"));
 
         // Test 8: Removing items from the front works  result: front-> A C D <- end
         String removedFront = deq.removeFirst();
